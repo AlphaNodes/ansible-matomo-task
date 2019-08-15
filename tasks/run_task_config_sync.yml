@@ -11,6 +11,8 @@
     src: '{{ matomo_dir }}/config/config.ini.php'
     dest: '{{ tmp_file }}'
     flat: yes
+  become: "{{ matomo_task_become | default(omit) }}"
+  become_user: '{{ matomo_task_become_user | default(omit) }}'
   delegate_to: '{{ matomo_config_master }}'
 
 - name: Sync config.ini.php
