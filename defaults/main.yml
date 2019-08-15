@@ -1,0 +1,18 @@
+matomo_dir: /srv/matomo
+matomo_user: www-data
+matomo_db_name: matomo
+
+# set url to use
+matomo_url: ''
+
+# see https://matomo.org/docs/setup-auto-archiving/
+# - core:archive
+# see https://plugins.matomo.org/QueuedTracking#faq
+# - queuedtracking:process
+# see https://matomo.org/docs/update/#database-upgrade-for-high-traffic-matomo-servers
+# - core:update
+matomo_console_name: ''
+
+# sync config/config.ini.php from primary server
+# - config-sync
+matomo_task_name: ''

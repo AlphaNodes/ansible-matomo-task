@@ -1,0 +1,19 @@
+- name: Check if matomo_config_master is specified
+  fail:
+    msg: 'matomo_config_master is required.'
+  when: matomo_config_master is undefined or matomo_config_master == ''
+
+- name: Set temp file name for sync config
+  set_fact: tmp_file="/tmp/matomo-config-{{ ansible_date_time.date }}.php"
+
+- name: Get config.ini.php from {{ matomo_config_master }}
+  fetch:
+    src: '{{ matomo_dir }}/config/config.ini.php'
+    dest: '{{ tmp_file }}'
+    flat: yes
+  delegate_to: '{{ matomo_config_master }}'
+
+- name: Sync config.ini.php
+  copy:
+    src: '{{ tmp_file }}'
+    dest: '{{ matomo_dir }}/config/config.ini.php'

@@ -1,0 +1,53 @@
+- name: Check if matomo_db_dump is specified
+  fail:
+    msg: 'matomo_db_dump is required.'
+  when: matomo_db_dump is undefined or matomo_db_dump == ''
+
+- stat:
+    path: '{{ matomo_db_dump }}'
+    get_checksum: no
+    get_md5: no
+  register: db_dump_exists
+
+- name: Check if matomo dump file exists
+  fail:
+    msg: 'matomo_db_dump {{ matomo_db_dump }} does not exist!'
+  when: not db_dump_exists.stat.exists
+
+- name: Drop existing database
+  mysql_db:
+    name: '{{ matomo_db_name }}'
+    state: absent
+
+- name: Pause 30 seconds
+  pause:
+    seconds: 30
+
+- name: Create new database
+  mysql_db:
+    name: '{{ matomo_db_name }}'
+    state: present
+
+- name: Import matomo database
+  mysql_db:
+    name: '{{ matomo_db_name }}'
+    state: import
+    target: '{{ matomo_db_dump }}'
+
+- name: Run matomo console core:update
+  shell: "php console --no-ansi -n core:update --yes"
+  args:
+    executable: /bin/bash
+    chdir: "{{ matomo_dir }}"
+  become: '{{ "no" if matomo_user is undefined else "yes" }}'
+  become_user: '{{ matomo_user | default(omit) }}'
+  when: (mysql_replication_role is undefined or mysql_replication_role == 'master') and (sync_master is undefined)
+
+- name: Run matomo console database:optimize-archive-tables
+  shell: "php console --no-ansi -n database:optimize-archive-tables all"
+  args:
+    executable: /bin/bash
+    chdir: "{{ matomo_dir }}"
+  become: '{{ "no" if matomo_user is undefined else "yes" }}'
+  become_user: '{{ matomo_user | default(omit) }}'
+  when: (mysql_replication_role is undefined or mysql_replication_role == 'master') and (sync_master is undefined)
