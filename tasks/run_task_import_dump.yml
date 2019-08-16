@@ -39,7 +39,7 @@
   args:
     executable: /bin/bash
     chdir: "{{ matomo_dir }}"
-  become: '{{ "no" if matomo_user is undefined else "yes" }}'
+  become: '{{ true if matomo_user is defined else false }}'
   become_user: '{{ matomo_user | default(omit) }}'
   when: (mysql_replication_role is undefined or mysql_replication_role == 'master') and (sync_master is undefined)
 
@@ -48,6 +48,6 @@
   args:
     executable: /bin/bash
     chdir: "{{ matomo_dir }}"
-  become: '{{ "no" if matomo_user is undefined else "yes" }}'
+  become: '{{ true if matomo_user is defined else false }}'
   become_user: '{{ matomo_user | default(omit) }}'
   when: (mysql_replication_role is undefined or mysql_replication_role == 'master') and (sync_master is undefined)
