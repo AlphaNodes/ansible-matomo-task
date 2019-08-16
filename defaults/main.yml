@@ -16,3 +16,6 @@ matomo_console_name: ''
 # sync config/config.ini.php from primary server
 # - config-sync
 matomo_task_name: ''
+
+matomo_task_geo_lite_file: GeoLite2-City.mmdb
+matomo_task_geo_lite_url: https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz

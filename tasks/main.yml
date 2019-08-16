@@ -13,12 +13,7 @@
   tags: matomo
   when: matomo_console_name != ''
 
-- name: Include config-sync tasks
-  import_tasks: run_task_config_sync.yml
+- name: Include {{ matomo_task_name }} tasks
+  include_tasks: run_task_{{ matomo_task_name | replace('-', '_') }}.yml
   tags: matomo
-  when: matomo_task_name == 'config-sync'
-
-- name: Include import-dump tasks
-  import_tasks: run_task_import_dump.yml
-  tags: matomo
-  when: matomo_task_name == 'import-dump'
+  when: matomo_task_name in matomo_task_available_tasks

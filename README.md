@@ -5,6 +5,7 @@ Run Matomo tasks for an installed matomo
 - run console tasks
 - run config.ini.php sync for cluster mode
 - run import dump
+- run geoip database update
 
 ## Dependencies
 

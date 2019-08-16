@@ -1,0 +1,4 @@
+matomo_task_available_tasks:
+  - config-sync
+  - import-dump
+  - geoip-update

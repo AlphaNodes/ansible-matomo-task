@@ -1,0 +1,37 @@
+- set_fact: working_dir="/tmp/matomo-geoip-working-dir-{{ ansible_date_time.date }}"
+- set_fact: archive_file="{{ working_dir }}/latest.tar.gz"
+
+- name: Local prepare to provide database
+  block:
+    - name: Create working directory
+      file:
+        path: '{{ working_dir }}'
+        state: directory
+
+    - stat: path='{{ archive_file }}'
+      register: archive_file_exists
+
+    - name: Download GeoLite2 archive file
+      get_url:
+        url: '{{ matomo_task_geo_lite_url }}'
+        dest: '{{ archive_file }}'
+      when: not archive_file_exists.stat.exists
+
+    - name: Extrace archive file
+      unarchive:
+        src: '{{ archive_file }}'
+        dest: '{{ working_dir }}'
+        extra_opts:
+          - '--strip=1'
+
+  delegate_to: localhost
+
+- name: Sync {{ matomo_task_geo_lite_file }}
+  copy:
+    src: '{{ working_dir }}/{{ matomo_task_geo_lite_file }}'
+    dest: '{{ matomo_dir }}/misc/{{ matomo_task_geo_lite_file }}'
+    owner: '{{ matomo_user }}'
+    group: '{{ matomo_user }}'
+    force: yes
+  become: "{{ matomo_task_become | default(omit) }}"
+  become_user: '{{ matomo_task_become_user | default(omit) }}'
