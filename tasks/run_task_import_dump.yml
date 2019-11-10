@@ -6,7 +6,6 @@
 - stat:
     path: '{{ matomo_db_dump }}'
     get_checksum: no
-    get_md5: no
   register: db_dump_exists
 
 - name: Check if matomo dump file exists

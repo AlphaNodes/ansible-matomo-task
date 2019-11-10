@@ -8,7 +8,9 @@
         path: '{{ working_dir }}'
         state: directory
 
-    - stat: path='{{ archive_file }}'
+    - stat:
+        path: '{{ archive_file }}'
+        get_checksum: no
       register: archive_file_exists
 
     - name: Download GeoLite2 archive file
