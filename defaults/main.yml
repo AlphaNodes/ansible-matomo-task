@@ -17,5 +17,5 @@ matomo_console_name: ''
 # - config-sync
 matomo_task_name: ''
 
-matomo_task_geo_lite_file: GeoLite2-City.mmdb
-matomo_task_geo_lite_url: https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+matomo_task_geo_lite_file: DBIP-City.mmdb
+matomo_task_geo_lite_url: https://download.db-ip.com/free/dbip-city-lite-{{ ansible_date_time.year }}-{{ ansible_date_time.month }}.mmdb.gz
